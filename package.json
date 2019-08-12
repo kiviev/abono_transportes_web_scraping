@@ -1,0 +1,24 @@
+{
+	"name": "abono-transportes-web-scraping",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"author": "kiviev@gmail.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kiviev/security_home_bot.git"
+	},
+	"bugs": {
+		"url": "https://github.com/kiviev/security_home_bot/issues"
+	},
+	"homepage": "https://github.com/kiviev/security_home_bot#readme",
+	"license": "ISC",
+	"dependencies": {
+		"detect-rpi": "1.3.0",
+		"dotenv": "7.0.0",
+		"puppeteer": "1.14.0"
+	}
+}
