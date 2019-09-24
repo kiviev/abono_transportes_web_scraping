@@ -2,31 +2,30 @@ require('dotenv').config({ path: '.env' });
 const puppeteer = require('puppeteer');
 const Helpers = require('./Helpers');
 const isPi = require('detect-rpi');
-
+const config = require('./package.json').config;
 
 
 class PuppeteerPack {
-    constructor(url,params = {}){
+    constructor(abono_num){
+        if(!abono_num){
+            console.error("Ningún número de abono");
+            process.exit(1);
+        }
         this.pup = puppeteer;
         this.browser = null;
         this.page = null;
-        this.url = url || null;
         this.headless  = process.env.IN_DEVELOPMENT == 'true';
-        this.select = process.env.ABONO_SELECT_ID;
-        this.input = process.env.ABONO_INPUT_ID;
-        this.sendButton = process.env.ABONO_SEND_BUTTON_ID;
-        this.resultTable = process.env.ABONO_RESULT_TABLE;
-        this.numAbono = Helpers.getAbonoNum(process.env.ABONO_NUM);
+        this.url = config.abono_url || null;
+        this.select = config.select_id;
+        this.input = config.input_id;
+        this.sendButton = config.send_button_id;
+        this.resultTable = config.result_table;
+        this.numAbono = Helpers.getAbonoNum(abono_num);
         return this;
     }
 
 
     async init(){
-        // await this.launch();
-        // await this.getPage();
-        // await this.setLogs();
-        // await this.goToUrl();
-        // await this.inPage();
         return await Promise.all([
             await this.launch(),
             await this.getPage(),
@@ -43,7 +42,6 @@ class PuppeteerPack {
     }
 
     async launch(){
-        // console.log('xxxxxxx' ,this.headless);
         let options = {
             headless: true,
             // devtools : false,
@@ -74,7 +72,11 @@ class PuppeteerPack {
     }
     async setLogs(){
         if(!this.page) return false;
-        if (process.env.IN_DEVELOPMENT ==  'true') this.page.on('console', consoleObj => console.log(consoleObj.text()));
+        this.page.on('console', (consoleObj) => {
+            if (process.env.IN_DEVELOPMEN6T ==  'true'){ 
+                console.log(consoleObj.text());
+            }
+        });
 
     }
 
@@ -93,13 +95,23 @@ class PuppeteerPack {
         await this.page.waitFor(3000);
         await this.page.keyboard.type(this.numAbono.input);
         await this.page.click(this.sendButton);
-        await this.page.waitForNavigation({ waitUntil: 'load' })
-
+        // await this.page.waitForNavigation();
+        await this.page.waitForNavigation({ waitUntil: 'domcontentloaded' })
+        // return Promise.all([
+        //      this.page.select(this.select, this.numAbono.select),
+        //      this.page.waitFor(1000),
+        //      this.page.focus(this.input),
+        //      this.page.waitFor(3000),
+        //      this.page.keyboard.type(this.numAbono.input),
+        //      this.page.click(this.sendButton),
+        //     //  this.page.waitForNavigation()
+        // ])
     }
 
     async evaluate(){
         if (!this.page) return false;
         let result = await this.page.evaluate(selector => {
+            console.log("dentro del evaluate")
             let data = $(selector);
             let dataFinal = {};
             for(let i in data){

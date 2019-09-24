@@ -16,7 +16,7 @@ module.exports = {
 
 	},
 	getAbonoResultData(data) {
-
+		if(!data) return;
 		let finalData = {};
 		let carga = data[2].split(':');
 		let validez = data[3].split(':');
