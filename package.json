@@ -10,12 +10,12 @@
 	"author": "kiviev@gmail.com",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/kiviev/security_home_bot.git"
+		"url": "git+https://github.com/kiviev/abono_transportes_web_scraping.git"
 	},
 	"bugs": {
-		"url": "https://github.com/kiviev/security_home_bot/issues"
+		"url": "https://github.com/kiviev/abono_transportes_web_scraping/issues"
 	},
-	"homepage": "https://github.com/kiviev/security_home_bot#readme",
+	"homepage": "https://github.com/kiviev/abono_transportes_web_scraping#readme",
 	"license": "ISC",
 	"dependencies": {
 		"detect-rpi": "1.3.0",
