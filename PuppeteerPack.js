@@ -24,7 +24,6 @@ class PuppeteerPack {
         return this;
     }
 
-
     async init(){
         return await Promise.all([
             await this.launch(),
@@ -59,6 +58,7 @@ class PuppeteerPack {
             this.page = await this.browser.newPage();
             await this.page.setViewport({ width: 1350, height: 768 });
             await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36');
+            await this.page.setCacheEnabled(false);
         }else return false;
     }
 
@@ -73,11 +73,10 @@ class PuppeteerPack {
     async setLogs(){
         if(!this.page) return false;
         this.page.on('console', (consoleObj) => {
-            if (process.env.IN_DEVELOPMEN6T ==  'true'){ 
+            if (process.env.IN_DEVELOPMEN6T ==  'true'){
                 console.log(consoleObj.text());
             }
         });
-
     }
 
     async close(){
@@ -95,17 +94,8 @@ class PuppeteerPack {
         await this.page.waitFor(3000);
         await this.page.keyboard.type(this.numAbono.input);
         await this.page.click(this.sendButton);
-        // await this.page.waitForNavigation();
         await this.page.waitForNavigation({ waitUntil: 'domcontentloaded' })
-        // return Promise.all([
-        //      this.page.select(this.select, this.numAbono.select),
-        //      this.page.waitFor(1000),
-        //      this.page.focus(this.input),
-        //      this.page.waitFor(3000),
-        //      this.page.keyboard.type(this.numAbono.input),
-        //      this.page.click(this.sendButton),
-        //     //  this.page.waitForNavigation()
-        // ])
+
     }
 
     async evaluate(){
@@ -121,9 +111,6 @@ class PuppeteerPack {
 
         }, this.resultTable)
         .catch((e) => console.error(e));
-
-
-
         let finalData = Helpers.getAbonoResultData(result)
         return finalData;
     }
